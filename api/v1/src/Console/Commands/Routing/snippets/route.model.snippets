@@ -1,0 +1,59 @@
+<?php
+/**
+ * Created by Claudio Campos.
+ * User: callcocam@gmail.com
+ * https://www.sigasmart.com.br
+ */
+
+namespace {{NAMESPACE-ROUTE}};
+
+
+use App\{{NAME-MODULE}}\Controller\{{ROUTE-NAME}}Controller;
+use Flexe\RouteAbstract;
+use Slim\App;
+
+/**
+ * Class {{ROUTE-NAME}}Controller
+ * @package {{NAMESPACE-ROUTE}}
+ * @Route
+ * @Route("/{{ROUTE-NAME}}")
+ */
+class {{ROUTE-NAME}}Route extends RouteAbstract
+{
+
+    /**
+     * RouteAbstract constructor.
+     * @param App $app
+     */
+    public function __construct( App $app )
+    {
+       $this->create($app);
+    }
+
+    /**
+     * @param $app
+     * @return mixed
+     */
+    public function create( App $app )
+    {
+       $app->group("/api", function (){
+
+           $this->group("/{{CONTROLLER}}", function (){
+
+                $this->map(['GET','OPTIONS'],'[/]',sprintf("%s:stores",{{ROUTE-NAME}}Controller::class))->setName('{{ROUTE}}.{{CONTROLLER}}');
+
+                $this->map(['GET','OPTIONS'],'/create',sprintf("%s:create",{{ROUTE-NAME}}Controller::class))->setName('{{ROUTE}}.{{CONTROLLER}}.create');
+
+                $this->map(['GET','OPTIONS'],'/{id}/view',sprintf("%s:view",{{ROUTE-NAME}}Controller::class))->setName('{{ROUTE}}.{{CONTROLLER}}.view');
+
+                $this->map(['GET','OPTIONS'],'/{id}/edit',sprintf("%s:edit",{{ROUTE-NAME}}Controller::class))->setName('{{ROUTE}}.{{CONTROLLER}}.edit');
+
+                $this->map(['DELETE','OPTIONS'],'/{id}/delete',sprintf("%s:delete",{{ROUTE-NAME}}Controller::class))->setName('{{ROUTE}}.{{CONTROLLER}}.delete');
+
+                $this->map(['POST','OPTIONS'],'/save',sprintf("%s:save",{{ROUTE-NAME}}Controller::class))->setName('{{ROUTE}}.{{CONTROLLER}}.save');
+
+           });
+
+       });
+    }
+}

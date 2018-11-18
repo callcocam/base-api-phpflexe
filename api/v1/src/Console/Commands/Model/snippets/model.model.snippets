@@ -1,0 +1,28 @@
+<?php
+/**
+ * Created by Claudio Campos.
+ * User: callcocam@gmail.com
+ * https://www.sigasmart.com.br
+ */
+
+namespace {{NAMESPACE-MODEL}};
+
+use Flexe\Model\Db;
+
+/**
+ * Class {{MODEL-NAME}}Model
+ * @package {{NAMESPACE-MODEL}}
+ * @Model
+ */
+
+
+class {{MODEL-NAME}}Model extends Db
+{
+
+    protected $table = "{{NAME-TABLE}}";
+
+    protected $fillable = [{{FILLABLE}}];
+
+    protected $hidden = [];
+
+}
