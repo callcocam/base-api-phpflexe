@@ -8,8 +8,6 @@
 namespace App\Obras\Controller;
 
 
-use Flexe\Http\Controller;
-
 /**
  * Class ConclusoeController
  * @package App\Obras\Controller
@@ -25,6 +23,7 @@ class ConclusoeController extends AbstractController
 
     protected $controller = "conclusoe";
 
+    
 
 
 }

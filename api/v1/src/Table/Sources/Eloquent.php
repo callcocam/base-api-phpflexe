@@ -9,7 +9,6 @@
 namespace Flexe\Table\Sources;
 
 use Illuminate\Database\Capsule\Manager as DB;
-use Illuminate\Database\Eloquent\Model;
 
 class Eloquent extends AbstractSource
 {

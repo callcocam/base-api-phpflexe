@@ -12,7 +12,7 @@ use App\Obras\Model\ConclusoeModel;
 use App\Obras\Model\ContratoModel;
 use App\Obras\Model\ExecucoeModel;
 use App\Obras\Model\LicitacoeModel;
-use Flexe\Http\Controller;
+use App\Admin\Model\ImageModel;
 
 /**
  * Class ProjectController
@@ -42,15 +42,17 @@ class ProjectController extends AbstractController
 			
 			if($data):
 
-			    $result['rows'] = $data->toArray();
+			        $result = $data->toArray();
 				
-				$result['contract'] 	= ContratoModel::query()->where(['project_id'=>$data->id])->get();
+				$result['contract'] 	= ContratoModel::query()->where(['project_id'=>$data->id])->first();
 				
-				$result['conclusion'] 	= ConclusoeModel::query()->where(['project_id'=>$data->id])->get();
+				$result['conclusion'] 	= ConclusoeModel::query()->where(['project_id'=>$data->id])->first();
 
-				$result['execution'] 	= ExecucoeModel::query()->where(['project_id'=>$data->id])->get();
+				$result['execution'] 	= ExecucoeModel::query()->where(['project_id'=>$data->id])->first();
 
-				$result['licitacion'] 	= LicitacoeModel::query()->where(['project_id'=>$data->id])->get();
+				$result['licitacion'] 	= LicitacoeModel::query()->where(['project_id'=>$data->id])->first();
+                                
+                                $result['conclusion']['images'] = ImageModel::query()->where(['assets'=>'conclusoes','parent'=>$result['conclusion']['id']])->get();
 				
 		   endif;
 		   
@@ -76,15 +78,17 @@ class ProjectController extends AbstractController
 			
 			if($data):
 
-			    $result['rows'] = $data->toArray();
+			        $result['rows'] = $data->toArray();
 				
-				$result['contract'] 	= ContratoModel::query()->where(['project_id'=>$data->id])->get();
+				$result['contract'] 	= ContratoModel::query()->where(['project_id'=>$data->id])->first();
 				
-				$result['conclusion'] 	= ConclusoeModel::query()->where(['project_id'=>$data->id])->get();
+				$result['conclusion'] 	= ConclusoeModel::query()->where(['project_id'=>$data->id])->first();
 
-				$result['execution'] 	= ExecucoeModel::query()->where(['project_id'=>$data->id])->get();
+				$result['execution'] 	= ExecucoeModel::query()->where(['project_id'=>$data->id])->first();
 
-				$result['licitacion'] 	= LicitacoeModel::query()->where(['project_id'=>$data->id])->get();
+				$result['licitacion'] 	= LicitacoeModel::query()->where(['project_id'=>$data->id])->first();
+                                
+				$result['conclusion']['images'] 	= ImageModel::query()->where(['assets'=>'conclusoes','parent'=>$result['conclusion']['id']])->get();
 				
 		   endif;
 		   

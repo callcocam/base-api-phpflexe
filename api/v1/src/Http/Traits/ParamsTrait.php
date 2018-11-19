@@ -84,6 +84,36 @@ trait ParamsTrait
 
         return [];
     }
+    
+    
+    public function upload(\Slim\Http\UploadedFile $Files, $data=[]){
+
+            if($Files):
+
+                if(!empty($Files->getClientFilename())):
+
+                    $Name = explode(".", $Files->getClientFilename());
+
+                    $Folder = $this->getPath("dist/uploads",sprintf("%s.%s", str_slug(reset($Name)), end($Name)));
+					
+                    $Files->moveTo(sprintf("%s/%s", APP_UPLOAD_DIR, $Folder));
+
+                    if(!$Files->getError()):
+                         $data['link'] =$Folder;
+                         $data['folder'] = substr($Folder, 0,(strlen($Folder)-strlen($Files->getClientFilename())));
+                         $data['width'] =$Files->getSize();
+                         $data['type'] =$Files->getClientMediaType();
+                         $data['name'] =$Files->getClientFilename();
+                        return $data;
+
+                    endif;
+
+                endif;
+
+        endif;
+
+        return null;
+    }
 
      protected function getPath($Folder, $FileName){
 

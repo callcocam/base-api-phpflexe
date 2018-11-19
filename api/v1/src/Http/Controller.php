@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: caltj
@@ -8,38 +9,27 @@
 
 namespace Flexe\Http;
 
-
-use Carbon\Exceptions\InvalidDateException;
-use Flexe\Http\Traits\Get;
 use Flexe\Http\Traits\ParamsTrait;
-use Flexe\Model\Db;
 use Interop\Container\ContainerInterface;
-use Slim\Http\Request;
-use Slim\Http\Response;
 use Carbon\Carbon;
 
-abstract class Controller
-{
+abstract class Controller {
 
     use ParamsTrait;
 
     protected $route = 'admin';
-
     protected $controller = 'admin';
-
     protected $action = "stores";
-
     protected $model;
-
     protected $table;
+
     /**
      * @var ContainerInterface
      */
     protected $container;
     protected $alias = 'name';
 
-    public function __construct( ContainerInterface $container)
-    {
+    public function __construct(ContainerInterface $container) {
         $this->container = $container;
 
         $this->rq = $container->get('request');
@@ -56,7 +46,7 @@ abstract class Controller
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function stores( $request, $response, $arqs = []){
+    public function stores($request, $response, $arqs = []) {
 
         if ($request->isMethod("GET")):
             $model = $this->container->get($this->model);
@@ -71,47 +61,8 @@ abstract class Controller
         endif;
 
         return $response->withStatus(200)
-            ->withHeader("Content-Type", "application/json")
-            ->withJson([]);
-
-    }
-	
-	/**
-     * @param $request Request
-     * @param $response Response
-     * @param array $arqs
-     * @return mixed
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
-    public function search( $request, $response, $arqs = []){
-
-        if ($request->isMethod("GET")):
-            $model = $this->container->get($this->model);
-
-            $table = $this->container->get($this->table);
-			
-			$params = array_filter($this->get());
-
-			$result = $model::query()->select('name')->where($params['key'], 'like', '%' . $params['value'] . '%')->get();
-           
-		    $data['rows'] = [];
-		   
-			if($result):
-			
-				$data['rows'] = array_values($result->toArray());
-			
-			endif;
-
-            $data['tenant'] = $this->tenant;
-
-            return $response->withJson($data);
-        endif;
-
-        return $response->withStatus(200)
-            ->withHeader("Content-Type", "application/json")
-            ->withJson([]);
-
+                        ->withHeader("Content-Type", "application/json")
+                        ->withJson([]);
     }
 
     /**
@@ -122,7 +73,44 @@ abstract class Controller
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function view($request,$response, $arqs = []){
+    public function search($request, $response, $arqs = []) {
+
+        if ($request->isMethod("GET")):
+            $model = $this->container->get($this->model);
+
+            $table = $this->container->get($this->table);
+
+            $params = array_filter($this->get());
+
+            $result = $model::query()->select('name')->where($params['key'], 'like', '%' . $params['value'] . '%')->get();
+
+            $data['rows'] = [];
+
+            if ($result):
+
+                $data['rows'] = array_values($result->toArray());
+
+            endif;
+
+            $data['tenant'] = $this->tenant;
+
+            return $response->withJson($data);
+        endif;
+
+        return $response->withStatus(200)
+                        ->withHeader("Content-Type", "application/json")
+                        ->withJson([]);
+    }
+
+    /**
+     * @param $request Request
+     * @param $response Response
+     * @param array $arqs
+     * @return mixed
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function view($request, $response, $arqs = []) {
 
         if ($request->isMethod("GET")):
 
@@ -143,7 +131,7 @@ abstract class Controller
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function select($request,$response, $arqs = []){
+    public function select($request, $response, $arqs = []) {
 
 
         if ($request->isMethod("GET")):
@@ -151,15 +139,12 @@ abstract class Controller
 
             $model = $this->container->get($this->model);
 
-            if(isset($arqs['id']) && (int)$arqs['id']){
+            if (isset($arqs['id']) && (int) $arqs['id']) {
 
-                $data['rows'][] = $model->select(sprintf('%s as id',$arqs['index']),sprintf('%s as text',$arqs['name']))->find($arqs['id']);
+                $data['rows'][] = $model->select(sprintf('%s as id', $arqs['index']), sprintf('%s as text', $arqs['name']))->find($arqs['id']);
+            } else {
 
-            }
-            else{
-
-                $data['rows'] = $model->select(sprintf('%s as id',$arqs['index']),sprintf('%s as text',$arqs['name']))->get();
-
+                $data['rows'] = $model->select(sprintf('%s as id', $arqs['index']), sprintf('%s as text', $arqs['name']))->get();
             }
 
             $data['tenant'] = $this->tenant;
@@ -169,8 +154,8 @@ abstract class Controller
         endif;
 
         return $response->withStatus(200)
-            ->withHeader("Content-Type", "application/json")
-            ->withJson([]);
+                        ->withHeader("Content-Type", "application/json")
+                        ->withJson([]);
     }
 
     /**
@@ -181,7 +166,7 @@ abstract class Controller
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function create($request,$response, $arqs = []){
+    public function create($request, $response, $arqs = []) {
 
         if ($request->isMethod("GET")):
 
@@ -192,7 +177,6 @@ abstract class Controller
         endif;
 
         return null;
-
     }
 
     /**
@@ -203,35 +187,15 @@ abstract class Controller
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function edit($request,$response, $arqs = []){
+    public function edit($request, $response, $arqs = []) {
 
         if ($request->isMethod("GET")):
 
             $model = $this->container->get($this->model);
 
-            $data = $model->find($arqs['id']);
-
             $result = [];
 
-            if($data):
-
-                foreach($data->toArray() as $key => $value):
-
-//                    if($key == "created_at" || $key == "updated_at"):
-//
-//                        $result[$key] = $this->dateFormat($value);
-//
-//                    else:
-//
-//                        $result[$key] = $value;
-//
-//                    endif;
-
-                    $result[$key] = $value;
-
-                endforeach;
-
-            endif;
+            $result = $model->find($arqs['id']);
 
             $result['tenant'] = $this->tenant;
 
@@ -250,7 +214,7 @@ abstract class Controller
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function delete($request,$response, $arqs = []){
+    public function delete($request, $response, $arqs = []) {
 
         if ($request->isMethod("DELETE")):
             /**
@@ -260,7 +224,7 @@ abstract class Controller
 
             $data['result'] = false;
 
-            if(isset($arqs['id']) && (int)$arqs['id']):
+            if (isset($arqs['id']) && (int) $arqs['id']):
 
                 $data = $model->find($arqs['id']);
 
@@ -268,7 +232,7 @@ abstract class Controller
 
                 $data['error'] = 'Não foi possivel excluir o cadstro!';
 
-                if($data['result']):
+                if ($data['result']):
 
                     $data['error'] = 'Cadastro excluido com sucesso!';
 
@@ -283,7 +247,6 @@ abstract class Controller
         endif;
 
         return null;
-
     }
 
     /**
@@ -294,7 +257,7 @@ abstract class Controller
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function save($request,$response, $arqs = []){
+    public function save($request, $response, $arqs = []) {
 
         if ($request->isMethod("POST")):
             /**
@@ -303,10 +266,10 @@ abstract class Controller
             $model = $this->container->get($this->model);
 
             $data['result'] = false;
-            $image =  $this->image();
-            if($image):
+            $image = $this->image();
+            if ($image):
 
-                $dataFiles = array_merge($this->post(),$image);
+                $dataFiles = array_merge($this->post(), $image);
 
             else:
 
@@ -314,58 +277,58 @@ abstract class Controller
 
             endif;
 
-            if(!isset($dataFiles['status']) && !(int)$dataFiles['status']):
+            if (!isset($dataFiles['status']) && !(int) $dataFiles['status']):
                 $dataFiles['status'] = 0;
             else:
-                $dataFiles['status'] = 1;
+                //$dataFiles['status'] = 1;
             endif;
 
-            if(isset($dataFiles['type'])):
-                if(!(int)$dataFiles['type']):
+            if (isset($dataFiles['type'])):
+                if (!(int) $dataFiles['type']):
                     $dataFiles['type'] = 0;
                 else:
                     $dataFiles['type'] = 1;
                 endif;
             endif;
 
-			$dataFiles['updated_at'] = date("Y-m-d H:i:s");
+            $dataFiles['updated_at'] = date("Y-m-d H:i:s");
 
-            if(isset($dataFiles['alias'])):
+            if (isset($dataFiles['alias'])):
 
                 $dataFiles['alias'] = str_slug($dataFiles[$this->alias]);
 
             endif;
-            if(isset($dataFiles['slug'])):
+            if (isset($dataFiles['slug'])):
 
                 $dataFiles['slug'] = str_slug($dataFiles[$this->alias]);
 
             endif;
 
-            if(isset($dataFiles['id']) && (int)$dataFiles['id']):
+            if (isset($dataFiles['id']) && (int) $dataFiles['id']):
 
                 $id = $dataFiles['id'];
 
-                unset($dataFiles['id'],$dataFiles['created_at']);
+                unset($dataFiles['id'], $dataFiles['created_at']);
 
-                $data['result'] =   $model::query()->where(['id'=>$id])->update($dataFiles);
+                $data['result'] = $model::query()->where(['id' => $id])->update($dataFiles);
 
                 $data['error'] = 'Não foi possivel atualizar o cadstro!';
 
-                if($data['result']):
+                if ($data['result']):
 
                     $data['error'] = 'Cadastro atualizado com sucesso!';
 
                 endif;
 
             else:
-			
-				$dataFiles['created_at'] = date("Y-m-d H:i:s");
-				
-                $data['result'] =  $model::query()->insertGetId($dataFiles);
+
+                $dataFiles['created_at'] = date("Y-m-d H:i:s");
+
+                $data['result'] = $model::query()->insertGetId($dataFiles);
 
                 $data['error'] = 'Não foi possivel finalizar o cadstro!';
 
-                if($data['result']):
+                if ($data['result']):
 
                     $data['error'] = 'Cadastro inserido com sucesso!';
 
@@ -382,20 +345,51 @@ abstract class Controller
         return null;
     }
 
-    protected function dateFormat($context,$format='d/m/Y H:i:s',$type=true){
+    public function uploads($request, $response, $arqs = array()) {
 
-        $valid = $this->isValidDateTimeString($context,$format);
+        if ($request->isMethod("POST")):
+            /**
+             * @var $model Db
+             */
+            $model = $this->container->get($this->model);
 
-        if($valid){
+            $data = $this->post();
+            
+            $data['company_id'] = $this->tenant['id'];
+            
+            $data['updated_at'] = date("Y-m-d H:i:s");
+                    
+            $image = $request->getUploadedFiles();
+
+            foreach ($image as $uploadedFile) {
+               
+                $dataArray = $this->upload($uploadedFile, $data);
+
+                $model::query()->insertGetId($dataArray);
+            }
+            
+           $data = $model::query()->where(['assets'=>$data['assets'],'parent'=>$data['parent']])->get()->toArray();
+            
+            return $response->withJson($data);
+
+        endif;
+
+        return null;
+    }
+
+    protected function dateFormat($context, $format = 'd/m/Y H:i:s', $type = true) {
+
+        $valid = $this->isValidDateTimeString($context, $format);
+
+        if ($valid) {
 
             return Carbon::createFromTimestamp($context)->format($format);
-
         }
-		if($type){
-         return date($format);
-		}
-
+        if ($type) {
+            return date($format);
+        }
     }
+
     private function isValidDateTimeString($str_dt, $str_dateformat) {
         $date = \DateTime::createFromFormat($str_dateformat, $str_dt, new \DateTimeZone(date_default_timezone_get()));
         return $date && $date->format($str_dateformat) == $str_dt;

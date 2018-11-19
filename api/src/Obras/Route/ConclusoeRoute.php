@@ -51,6 +51,8 @@ class ConclusoeRoute extends RouteAbstract
                 $this->map(['DELETE','OPTIONS'],'/{id}/delete',sprintf("%s:delete",ConclusoeController::class))->setName('obras.conclusoe.delete');
 
                 $this->map(['POST','OPTIONS'],'/save',sprintf("%s:save",ConclusoeController::class))->setName('obras.conclusoe.save');
+                
+                $this->map(['POST','OPTIONS'],'/uploads',sprintf("%s:uploads",ConclusoeController::class))->setName('obras.conclusoe.uploads');
 
            });
 

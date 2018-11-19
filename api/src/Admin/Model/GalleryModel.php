@@ -5,23 +5,23 @@
  * https://www.sigasmart.com.br
  */
 
-namespace {{NAMESPACE-MODEL}};
+namespace App\Admin\Model;
 
 use Flexe\Model\Db;
 
 /**
- * Class {{MODEL-NAME}}Model
- * @package {{NAMESPACE-MODEL}}
+ * Class GalleryModel
+ * @package App\Admin\Model
  * @Model
  */
 
 
-class {{MODEL-NAME}}Model extends Db
+class GalleryModel extends Db
 {
 
-    protected $table = "{{NAME-TABLE}}";
+    protected $table = "gallerys";
 
-    protected $fillable = [{{FILLABLE}}];
+    protected $fillable = ['id','company_id','parent','assets','name','folder','status','created_at','updated_at'];
 
     protected $hidden = [];
     
