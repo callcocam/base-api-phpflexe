@@ -38,7 +38,7 @@ class ProjectController extends AbstractController {
             if ($data):
 
                 $result = $data->toArray();
-                
+
                 $result['contract'] = ContratoModel::query()->where(['project_id' => $data->id])->first();
 
                 $result['conclusion'] = ConclusoeModel::query()->where(['project_id' => $data->id])->first();
@@ -58,6 +58,32 @@ class ProjectController extends AbstractController {
         endif;
 
         return null;
+    }
+
+    public function delete($request, $response, $arqs = array()) {
+
+        if ($request->isMethod("DELETE")):
+
+            $model = $this->container->get($this->model);
+
+            if (isset($arqs['id']) && (int) $arqs['id']):
+
+                $data = $model->find($arqs['id']);
+
+                $contract = ContratoModel::query()->where(['project_id' => $arqs['id']])->delete();
+
+                $conclusion = ConclusoeModel::query()->where(['project_id' => $arqs['id']])->delete();
+
+                $execution = ExecucoeModel::query()->where(['project_id' => $arqs['id']])->delete();
+
+                $licitacion = LicitacoeModel::query()->where(['project_id' => $arqs['id']])->delete();
+
+                $conclusion_images = ImageModel::query()->where(['assets' => 'conclusoes', 'parent' => $conclusion['id']])->delete();
+
+            endif;
+        endif;
+
+        return parent::delete($request, $response, $arqs);
     }
 
     public function view($request, $response, $arqs = []) {

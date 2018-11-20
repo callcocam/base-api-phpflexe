@@ -42,7 +42,8 @@ class AuthModel extends Db
     public function authenticate($login,$password){
 
         $this->Result = $this->where([
-            'email'=>$login
+            'email'=>$login,
+            'company_id'=>COMPANYS_ID
         ])->first();
 
         $this->Code = self::FAILURE_CREDENTIAL_INVALID;

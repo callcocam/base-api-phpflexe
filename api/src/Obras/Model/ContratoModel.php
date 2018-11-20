@@ -21,7 +21,7 @@ class ContratoModel extends Db
 
     protected $table = "contratos";
 
-    protected $fillable = ['id','company_id','project_id','convenio','proposta','programa','contratacao','publicacao','investimento','repasse','contrapartida','description','status','updated_at'];
+    protected $fillable = ['id','company_id','project_id','convenio', 'convenio_siafi','vigencia','proposta','programa','contratacao','publicacao','investimento','repasse','contrapartida','description','status','updated_at'];
 
     protected $hidden = [];
 

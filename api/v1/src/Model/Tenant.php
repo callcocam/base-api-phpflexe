@@ -45,19 +45,21 @@ class Tenant extends Db
             $data['updated_at']     = date("Y-m-d H:i:s");
 
 
-            self::query()->insert($data);
+            $CompanyId = self::query()->insertGetId($data);
 
+           
+
+            if($CompanyId):
+            
             $this->company = $this->where([
 
-                'assets' =>COMPANY_KEY
+            'assets' =>COMPANY_KEY
 
             ])->first();
 
-            if($this->company):
+            $this->company->company_id = $CompanyId;
 
-                $this->company->company_id = $this->company->id;
-
-                $this->company->save();
+            $this->company->save();
 
             endif;
         endif;

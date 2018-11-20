@@ -144,7 +144,9 @@ abstract class Controller {
                 $data['rows'][] = $model->select(sprintf('%s as id', $arqs['index']), sprintf('%s as text', $arqs['name']))->find($arqs['id']);
             } else {
 
-                $data['rows'] = $model->select(sprintf('%s as id', $arqs['index']), sprintf('%s as text', $arqs['name']))->get();
+                $data['rows'] = $model->select(sprintf('%s as id', $arqs['index']), sprintf('%s as text', $arqs['name']))->where([
+                    'company_id'=>$this->tenant['id']
+                ])->get();
             }
 
             $data['tenant'] = $this->tenant;
@@ -279,8 +281,6 @@ abstract class Controller {
 
             if (!isset($dataFiles['status']) && !(int) $dataFiles['status']):
                 $dataFiles['status'] = 0;
-            else:
-                $dataFiles['status'] = 1;
             endif;
 
             if (isset($dataFiles['type'])):
@@ -303,7 +303,9 @@ abstract class Controller {
                 $dataFiles['slug'] = str_slug($dataFiles[$this->alias]);
 
             endif;
-
+            
+            $dataFiles['company_id'] = $this->tenant['id'];
+            
             if (isset($dataFiles['id']) && (int) $dataFiles['id']):
 
                 $id = $dataFiles['id'];
