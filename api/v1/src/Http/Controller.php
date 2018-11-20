@@ -280,7 +280,7 @@ abstract class Controller {
             if (!isset($dataFiles['status']) && !(int) $dataFiles['status']):
                 $dataFiles['status'] = 0;
             else:
-                //$dataFiles['status'] = 1;
+                $dataFiles['status'] = 1;
             endif;
 
             if (isset($dataFiles['type'])):
@@ -337,7 +337,7 @@ abstract class Controller {
             endif;
 
             $data['tenant'] = $this->tenant;
-
+            $data['status']=$dataFiles['status'];
             return $response->withJson($data);
 
         endif;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by Claudio Campos.
  * User: callcocam@gmail.com
@@ -6,7 +7,6 @@
  */
 
 namespace App\Obras\Controller;
-
 
 use App\Obras\Model\ConclusoeModel;
 use App\Obras\Model\ContratoModel;
@@ -20,18 +20,13 @@ use App\Admin\Model\ImageModel;
  * @Controller
  * @Route("/obras")
  */
-class ProjectController extends AbstractController
-{
+class ProjectController extends AbstractController {
 
     protected $model = 'ProjectModel';
-
     protected $table = 'ProjectTable';
-
     protected $controller = "project";
 
-
-    public function edit( $request, $response, $arqs = [] )
-    {
+    public function edit($request, $response, $arqs = []) {
         if ($request->isMethod("GET")):
 
             $model = $this->container->get($this->model);
@@ -39,24 +34,24 @@ class ProjectController extends AbstractController
             $data = $model->find($arqs['id']);
 
             $result = [];
-			
-			if($data):
 
-			        $result = $data->toArray();
-				
-				$result['contract'] 	= ContratoModel::query()->where(['project_id'=>$data->id])->first();
-				
-				$result['conclusion'] 	= ConclusoeModel::query()->where(['project_id'=>$data->id])->first();
+            if ($data):
 
-				$result['execution'] 	= ExecucoeModel::query()->where(['project_id'=>$data->id])->first();
+                $result = $data->toArray();
+                
+                $result['contract'] = ContratoModel::query()->where(['project_id' => $data->id])->first();
 
-				$result['licitacion'] 	= LicitacoeModel::query()->where(['project_id'=>$data->id])->first();
-                                
-                                $result['conclusion']['images'] = ImageModel::query()->where(['assets'=>'conclusoes','parent'=>$result['conclusion']['id']])->get();
-				
-		   endif;
-		   
-		    $result['tenant'] = $this->tenant;
+                $result['conclusion'] = ConclusoeModel::query()->where(['project_id' => $data->id])->first();
+
+                $result['execution'] = ExecucoeModel::query()->where(['project_id' => $data->id])->first();
+
+                $result['licitacion'] = LicitacoeModel::query()->where(['project_id' => $data->id])->first();
+
+                $result['conclusion']['images'] = ImageModel::query()->where(['assets' => 'conclusoes', 'parent' => $result['conclusion']['id']])->get();
+
+            endif;
+
+            $result['tenant'] = $this->tenant;
 
             return $response->withJson($result);
 
@@ -65,39 +60,38 @@ class ProjectController extends AbstractController
         return null;
     }
 
-	
-    public function view( $request, $response, $arqs = [] )
-    {
+    public function view($request, $response, $arqs = []) {
         if ($request->isMethod("GET")):
 
             $model = $this->container->get($this->model);
 
-            $data = $model::query()->where(['alias'=>$arqs['id']])->first();
+            $data = $model::query()->where(['alias' => $arqs['id']])->first();
 
             $result = [];
-			
-			if($data):
 
-			        $result['rows'] = $data->toArray();
-				
-				$result['contract'] 	= ContratoModel::query()->where(['project_id'=>$data->id])->first();
-				
-				$result['conclusion'] 	= ConclusoeModel::query()->where(['project_id'=>$data->id])->first();
+            if ($data):
 
-				$result['execution'] 	= ExecucoeModel::query()->where(['project_id'=>$data->id])->first();
+                $result['rows'] = $data->toArray();
 
-				$result['licitacion'] 	= LicitacoeModel::query()->where(['project_id'=>$data->id])->first();
-                                
-				$result['conclusion']['images'] 	= ImageModel::query()->where(['assets'=>'conclusoes','parent'=>$result['conclusion']['id']])->get();
-				
-		   endif;
-		   
-		   $result['tenant'] = $this->tenant;
-		   
+                $result['contract'] = ContratoModel::query()->where(['project_id' => $data->id])->first();
+
+                $result['conclusion'] = ConclusoeModel::query()->where(['project_id' => $data->id])->first();
+
+                $result['execution'] = ExecucoeModel::query()->where(['project_id' => $data->id])->first();
+
+                $result['licitacion'] = LicitacoeModel::query()->where(['project_id' => $data->id])->first();
+
+                $result['conclusion']['images'] = ImageModel::query()->where(['assets' => 'conclusoes', 'parent' => $result['conclusion']['id']])->get();
+
+            endif;
+
+            $result['tenant'] = $this->tenant;
+
             return $response->withJson($result);
 
         endif;
 
         return null;
     }
+
 }
